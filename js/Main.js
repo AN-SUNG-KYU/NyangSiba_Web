@@ -1,12 +1,13 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿const BACKEND_URL = "https://nyangsiba-backend.onrender.com"; // Render에서 배포된 Flask 서버 URL
+
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("guestbook-form");
     const nameInput = document.getElementById("name");
     const messageInput = document.getElementById("message");
     const guestbookList = document.getElementById("guestbook-list");
 
-    // 📌 1) 방명록 데이터 불러오기
     function fetchMessages() {
-        fetch("http://localhost:5000/messages")
+        fetch(`${BACKEND_URL}/messages`)
             .then(res => res.json())
             .then(data => {
                 guestbookList.innerHTML = "";
@@ -29,7 +30,6 @@
             .catch(err => console.error("Error fetching messages:", err));
     }
 
-    // 📌 2) 새로운 방명록 추가하기
     form.addEventListener("submit", function (event) {
         event.preventDefault();
 
@@ -41,7 +41,7 @@
             return;
         }
 
-        fetch("http://localhost:5000/add-message", {
+        fetch(`${BACKEND_URL}/add-message`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, message })
@@ -55,7 +55,6 @@
         .catch(err => console.error("Error adding message:", err));
     });
 
-    // 📌 3) 삭제 확인 팝업 함수
     function confirmDelete(id, listItem) {
         const popup = document.createElement("div");
         popup.classList.add("popup");
@@ -67,19 +66,18 @@
 
         document.body.appendChild(popup);
 
-        // "냥" 버튼 클릭 시 삭제
         popup.querySelector(".confirm-btn").addEventListener("click", function () {
-            fetch(`http://localhost:5000/delete-message/${id}`, {
+            fetch(`${BACKEND_URL}/delete-message/${id}`, {
                 method: "DELETE"
             })
             .then(() => {
                 listItem.remove();
                 popup.remove();
+                fetchMessages();
             })
             .catch(err => console.error("Error deleting message:", err));
         });
 
-        // "아니냥" 버튼 클릭 시 팝업 닫기
         popup.querySelector(".cancel-btn").addEventListener("click", function () {
             popup.remove();
         });
