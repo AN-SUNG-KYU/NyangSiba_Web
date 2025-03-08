@@ -1,4 +1,4 @@
-﻿const BACKEND_URL = "https://nyangsiba-backend.onrender.com"; // Render에서 배포된 Flask 서버 URL
+﻿const BACKEND_URL = "https://nyangsiba-web-1.onrender.com"; // 백엔드 Render URL
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("guestbook-form");
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     const listItem = document.createElement("li");
                     listItem.innerHTML = `<strong>${entry.name}</strong>: ${entry.message}`;
 
-                    // ❌ 삭제 버튼 추가
                     const deleteButton = document.createElement("button");
                     deleteButton.textContent = "❌";
                     deleteButton.classList.add("delete-btn");
